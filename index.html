@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Drawing Revision Review</title>
+<script src="libs/pdf.min.js"></script>
+<script src="libs/pdf.worker.min.js"></script>
+<style>
+:root{--bg:#f1f4f8;--card:#fff;--tx:#14202e;--mut:#5f6c7b;--bd:#d9dfe7;--ac:#1d4e7a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12161b;--card:#1c2229;--tx:#e6eaee;--mut:#97a3b0;--bd:#33414d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12161b;--card:#1c2229;--tx:#e6eaee;--mut:#97a3b0;--bd:#33414d;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+header{background:#1d4e7a;color:#fff;padding:14px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font-size:24px}#sub{opacity:.85;font-size:13px}
+header button{background:transparent;border:1px solid #ffffff80;color:#fff;margin-left:6px}
+button{font:inherit;border-radius:8px;padding:8px 14px;cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--tx)}
+button.pri{background:#c00000;color:#fff;border:0;padding:10px 18px}button:disabled{opacity:.5}
+.w{padding:14px 22px}
+.up{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:900px}
+@media(max-width:700px){.up{grid-template-columns:1fr}}
+.dz{background:var(--card);border:2px dashed var(--bd);border-radius:10px;padding:16px}.dz b{display:block;margin-bottom:6px}.dz input{width:100%}
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.stat{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 18px;color:var(--mut)}.stat b{display:block;font-size:30px;color:var(--tx);line-height:1.1}
+.stat.wide{flex:1;min-width:220px}.pb{height:7px;background:var(--bd);border-radius:4px;margin-top:6px;overflow:hidden}.pb i{display:block;height:100%;background:#1a7f37}
+.chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}.chips #chips{display:contents}
+.chip{border-radius:20px;padding:6px 14px}.chip.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+#q{padding:8px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);font:inherit;min-width:200px}
+.work{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:14px;height:calc(100vh - 270px);min-height:460px}
+@media(max-width:900px){.work{grid-template-columns:1fr;height:auto}.vw{height:60vh}.list{max-height:70vh}}
+.vw{background:var(--card);border:1px solid var(--bd);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.tb{display:flex;gap:8px;padding:10px;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--bd)}.tb .sp{flex:1;color:var(--mut);font-size:12px;text-align:right}
+.tb button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.vp{flex:1;position:relative;overflow:hidden;background:#cfd6de;cursor:grab;touch-action:none;min-height:0}
+.inner{position:absolute;left:0;top:0;transform-origin:0 0;background:#fff}
+.bx{position:absolute;border:calc(2px/var(--s,1)) solid;cursor:pointer}
+.bx.C{border-color:#d98a00;background:#d98a0030}.bx.A{border-color:#1a9c4a;background:#1a9c4a30}.bx.R{border-color:#d00000;background:#d0000030}
+.bx.sel{outline:calc(4px/var(--s,1)) solid #ffb800}
+.sl{position:absolute;top:0;bottom:0;width:calc(5px/var(--s,1));background:#ffb800;cursor:ew-resize;transform:translateX(-50%)}
+.sl::after{content:"↔";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:calc(34px/var(--s,1));height:calc(34px/var(--s,1));font-size:calc(20px/var(--s,1));line-height:calc(34px/var(--s,1));text-align:center;background:#ffb800;border-radius:50%;color:#000}
+.list{overflow:auto;display:flex;flex-direction:column;gap:10px;min-height:0;padding-right:4px}
+.cd{background:var(--card);border:1px solid var(--bd);border-left:6px solid;border-radius:12px;padding:10px 14px}
+.cd.C{border-left-color:#d98a00}.cd.A{border-left-color:#1a9c4a}.cd.R{border-left-color:#c0392b}
+.cd.sel{outline:2px solid #ffb800}.ch{display:flex;gap:10px;align-items:center;cursor:pointer;font-weight:600}
+.nb{background:#1d4e7a;color:#fff;border-radius:50%;min-width:28px;height:28px;display:grid;place-items:center;font-size:13px}
+.sub{color:var(--mut);font-size:13px;cursor:pointer;margin-top:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.two canvas{width:100%;height:auto;display:block;border:1px solid var(--bd)}
+.lb{color:#fff;font-size:12px;font-weight:700;padding:3px 8px}.b1{background:#0b5ed7}.b2{background:#d00000}
+.rv{display:grid;grid-template-columns:120px 1fr;gap:8px;margin-top:10px}.rv select,.rv textarea{font:inherit;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}
+/* ===== Dimensional layering theme ===== */
+:root{--bg:#e4eaf2;--card:#fff;--bd:#dbe2ec;--g1:#8fc0f066;--g2:#c3aef066;--e1:0 1px 2px #1d4e7a1a,0 3px 8px #1d4e7a14;--e2:0 2px 4px #1d4e7a14,0 8px 18px #1d4e7a1f,0 18px 36px #1d4e7a14;--e3:0 4px 8px #1d4e7a1f,0 16px 32px #1d4e7a2e,0 34px 64px #1d4e7a26;--hi:inset 0 1px 0 #ffffffd9;--rec:inset 0 3px 8px #1d4e7a38,inset 0 -1px 0 #ffffffcc}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0f15;--card:#19212b;--bd:#2a3542;--g1:#1d4e7a66;--g2:#4b2f8a40;--e1:0 1px 2px #0009,0 3px 8px #0007;--e2:0 2px 4px #0008,0 8px 18px #0009,0 18px 36px #0007;--e3:0 4px 8px #000a,0 16px 32px #000b,0 34px 64px #0009;--hi:inset 0 1px 0 #ffffff14;--rec:inset 0 3px 10px #000b,inset 0 -1px 0 #ffffff0d}}
+:root[data-theme="dark"]{--bg:#0b0f15;--card:#19212b;--bd:#2a3542;--g1:#1d4e7a66;--g2:#4b2f8a40;--e1:0 1px 2px #0009,0 3px 8px #0007;--e2:0 2px 4px #0008,0 8px 18px #0009,0 18px 36px #0007;--e3:0 4px 8px #000a,0 16px 32px #000b,0 34px 64px #0009;--hi:inset 0 1px 0 #ffffff14;--rec:inset 0 3px 10px #000b,inset 0 -1px 0 #ffffff0d}
+body{background:radial-gradient(900px 520px at 8% -8%,var(--g1),transparent 70%),radial-gradient(800px 520px at 100% 4%,var(--g2),transparent 70%),var(--bg) fixed;min-height:100vh}
+header{position:relative;z-index:5;margin:16px 22px 6px;border-radius:20px;background:linear-gradient(135deg,#17406a,#2b6cab 70%,#3b82c4);box-shadow:var(--e3),inset 0 1px 0 #ffffff40;text-shadow:0 2px 4px #0005}
+header button{background:#ffffff22;backdrop-filter:blur(8px);border:1px solid #ffffff55;box-shadow:var(--e1),inset 0 1px 0 #ffffff55;text-shadow:none}
+button{background:linear-gradient(var(--card),var(--bg));box-shadow:var(--e1),var(--hi);transition:transform .15s,box-shadow .15s}
+button:hover{transform:translateY(-2px);box-shadow:var(--e2),var(--hi)}button:active{transform:translateY(1px);box-shadow:var(--rec)}
+header button:hover{background:#ffffff38}
+button.pri{background:linear-gradient(#e03a3a,#b30000);box-shadow:0 6px 0 #7a0000,var(--e2);margin-bottom:6px}button.pri:active{transform:translateY(5px);box-shadow:0 1px 0 #7a0000,var(--e1)}
+.dz{box-shadow:var(--e2),var(--hi);border-radius:16px;transition:transform .2s,box-shadow .2s}.dz:hover{transform:translateY(-4px);box-shadow:var(--e3),var(--hi)}
+.stat{position:relative;isolation:isolate;border-radius:16px;box-shadow:var(--e2),var(--hi);transition:transform .2s,box-shadow .2s}
+.stat::before,.stat::after{content:"";position:absolute;z-index:-1;background:var(--card);border-radius:0 0 14px 14px;box-shadow:var(--e1)}
+.stat::before{left:12px;right:12px;bottom:-6px;height:10px;opacity:.9}.stat::after{left:24px;right:24px;bottom:-12px;height:10px;opacity:.6}
+.stat:hover{transform:translateY(-4px);box-shadow:var(--e3),var(--hi)}
+.stats{margin:14px 0 20px}.pb{box-shadow:var(--rec);height:9px}.pb i{background:linear-gradient(90deg,#1a7f37,#3fd070);box-shadow:0 0 8px #3fd07088}
+.chip{background:linear-gradient(var(--card),var(--bg));box-shadow:var(--e1),var(--hi)}.chip:hover{transform:translateY(-2px)}
+.chip.on{background:linear-gradient(#17406a,#2b6cab);box-shadow:inset 0 3px 7px #0007;transform:translateY(1px);text-shadow:0 1px 2px #0006}
+#q,.rv select,.rv textarea{box-shadow:var(--rec);border-color:transparent}
+.work{gap:22px}
+.vw{border:0;border-radius:20px;box-shadow:var(--e3),var(--hi);background:linear-gradient(var(--card),var(--bg))}
+.tb{border-bottom:0;box-shadow:0 6px 14px -8px #1d4e7a55;position:relative;z-index:2}
+.vp{margin:6px 14px 14px;border-radius:14px;box-shadow:var(--rec);background:linear-gradient(145deg,#c3ccd9,#dfe5ee)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .vp{background:linear-gradient(145deg,#10151c,#1b232d)}}
+.inner{box-shadow:0 2px 6px #0005,0 16px 40px #0006}
+.bx{box-shadow:0 3px 12px #0006}.bx.sel{box-shadow:0 0 0 calc(2px/var(--s,1)) #fff,0 6px 24px #000a}
+.list{padding:6px 12px 24px 6px;gap:16px}
+.cd{border-radius:16px;box-shadow:var(--e2),var(--hi);transition:transform .2s,box-shadow .2s;position:relative}
+.cd:hover{transform:translateY(-3px);box-shadow:var(--e3),var(--hi)}
+.cd.sel{outline:0;transform:translateY(-5px) scale(1.012);z-index:2;box-shadow:0 0 0 2px #ffb800,var(--e3)}
+.nb{background:linear-gradient(145deg,#3b82c4,#17406a);box-shadow:0 4px 8px #1d4e7a77,inset 0 1px 0 #ffffff66}
+.two canvas{border-radius:0 0 8px 8px;box-shadow:var(--e1)}.lb{border-radius:8px 8px 0 0}
+.bn{position:absolute;left:0;top:0;transform:translate(-45%,-45%);min-width:calc(24px/var(--s,1));height:calc(24px/var(--s,1));padding:0 calc(5px/var(--s,1));border-radius:calc(12px/var(--s,1));font:700 calc(13px/var(--s,1))/1 Arial,sans-serif;display:grid;place-items:center;color:#fff;border:calc(2px/var(--s,1)) solid #fff;box-shadow:0 calc(3px/var(--s,1)) calc(8px/var(--s,1)) #0008;pointer-events:none;z-index:3}
+.bx.C .bn{background:#d98a00}.bx.A .bn{background:#1a9c4a}.bx.R .bn{background:#d00000}
+.bx.sel{z-index:4}.bx.sel .bn{background:#ffb800;color:#000;min-width:calc(30px/var(--s,1));height:calc(30px/var(--s,1));font-size:calc(16px/var(--s,1))}
+.sheet{font-family:Arial,Helvetica,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cover .gen{font-size:13px;color:#444;margin:3px 0}.cover .n14{font-size:54px;font-weight:700;color:#d00000;margin:26px 0 4px;line-height:1.1}.cover .n14.ok{color:#1a7f37}
+.cover .cts{font-size:20px;font-weight:700;color:#333}.cover .cts span{margin-right:32px}
+.cover h3{color:#1d4e7a;font-size:22px;margin:28px 0 10px}.cover ol{font-size:14px;line-height:1.9;padding-left:28px;margin:0}
+.sw{display:inline-block;width:42px;height:22px;border:4px solid;vertical-align:middle;margin-right:14px}.kr{font-size:16px;font-weight:700;margin:8px 0}
+.sheet .dlh{color:#1d4e7a;font-size:28px;margin:0 0 12px}
+.sheet .dl{font-size:13px}.sheet .dl th{background:#1d4e7a;color:#fff;padding:8px 8px;font-size:13px}
+.sheet .dl td{padding:7px 8px;border:1px solid #e3d0d0;vertical-align:top}.sheet .dl tr.gr td{background:#e1e6f0;color:#1d4e7a;font-weight:700;border-color:#cfd6e4}
+.sheet .dl tr.kA td{background:#e9f7ee;border-color:#c7e3d0}.sheet .dl tr.kR td{background:#ffecec;border-color:#ecc9c9}.sheet .dl tr.kC td{background:#fff3df;border-color:#ead8b4}
+.sheet .dl tr.kA .tp{color:#1a7f37;font-weight:700}.sheet .dl tr.kR .tp{color:#b00000;font-weight:700}.sheet .dl tr.kC .tp{color:#a35f00;font-weight:700}
+.sheet .dl tr.kA td:first-child,.sheet .dl tr.kR td:first-child,.sheet .dl tr.kC td:first-child{font-weight:700}
+#rep{display:none}
+.sheet{background:#fff;color:#111}.pg{padding:6px 0 14px;break-after:page}.sheet h2{margin:0 0 4px;color:#1d4e7a;font-size:20px}
+.sm{font-size:11px;color:#555}.bar{color:#fff;padding:6px 10px;font-weight:700;margin:0 0 8px}.big{width:100%;height:auto;border:1px solid #bbb;display:block}
+.sheet table{border-collapse:collapse;width:100%;font-size:11.5px}.sheet th{background:#d00000;color:#fff;text-align:left;padding:4px 6px}.sheet td{padding:3px 6px;border-bottom:1px solid #ddd;vertical-align:top}.sheet tr{break-inside:avoid}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{border:1px solid #ccc;break-inside:avoid}.card .hd{background:#d00000;color:#fff;font-weight:700;font-size:12px;padding:3px 8px}.card .vl{font-size:11.5px;padding:4px 8px;font-weight:700}
+.card .two{padding:0 6px 6px;margin:0}.card .two canvas{border:2px solid #0b5ed7}.card .two div+div canvas{border-color:#d00000}
+@media print{@page{size:A4 landscape;margin:8mm}body{background:#fff}header,#up,#dash{display:none!important}#rep{display:block}}
+</style></head><body>
+<header><div><h1>Drawing Revision Review</h1><div id="sub">Upload Rev 1 and Rev 2 PDF drawings. Everything runs in your browser; nothing is stored.</div></div>
+<div><button id="newb">New comparison</button><button id="csv">Export review (CSV)</button><button id="pr">Print report</button></div></header>
+<div class="w" id="up"><div class="up"><label class="dz"><b style="color:#0b5ed7">Rev 1 drawing (old)</b><input type="file" id="f1" accept="application/pdf"></label>
+<label class="dz"><b style="color:#d00000">Rev 2 drawing (new)</b><input type="file" id="f2" accept="application/pdf"></label></div>
+<p><button class="pri" id="go">Compare &amp; open review</button> <span id="st" style="color:var(--mut)"></span></p></div>
+<div class="w" id="dash" hidden>
+<div class="stats" id="stats"></div>
+<div class="chips"><span id="chips"></span><input id="q" placeholder="Search…"></div>
+<div class="work"><div class="vw"><div class="tb"><button data-m="2" class="on">Rev 2 (new)</button><button data-m="1">Rev 1 (old)</button><button data-m="cmp">Compare slider</button>
+<select id="pgs" hidden></select><span class="sp">scroll = zoom, drag = move</span><button id="zo">−</button><button id="zi">+</button><button id="zf">Fit</button></div>
+<div class="vp" id="vp"><div class="inner" id="inner"></div></div></div><div class="list" id="list"></div></div></div>
+<div id="rep"></div>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc='libs/pdf.worker.min.js';
+const S=1.5,G=4,$=id=>document.getElementById(id);
+const st=t=>$('st').textContent=t,tick=()=>new Promise(r=>setTimeout(r,15));
+const esc=s=>String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+function el(h){const t=document.createElement('div');t.innerHTML=h;return t.firstElementChild}
+async function loadPages(f){
+ const pdf=await pdfjsLib.getDocument({data:new Uint8Array(await f.arrayBuffer())}).promise,out=[];
+ for(let i=1;i<=pdf.numPages;i++){
+  const p=await pdf.getPage(i),vp=p.getViewport({scale:S}),c=document.createElement('canvas');
+  c.width=Math.ceil(vp.width);c.height=Math.ceil(vp.height);
+  const x=c.getContext('2d',{willReadFrequently:true});x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);
+  await p.render({canvasContext:x,viewport:vp}).promise;
+  const tc=await p.getTextContent(),items=[];
+  for(const t of tc.items){const s=t.str.trim();if(!s)continue;
+   const m=pdfjsLib.Util.transform(vp.transform,t.transform),sx=Math.hypot(m[0],m[1])||1,w=t.width*S;
+   const px=[m[4],m[4]+w*m[0]/sx,m[4]+m[2],m[4]+w*m[0]/sx+m[2]],py=[m[5],m[5]+w*m[1]/sx,m[5]+m[3],m[5]+w*m[1]/sx+m[3]];
+   const x0=Math.min(...px),y0=Math.min(...py);items.push({s,x:x0,y:y0,w:Math.max(...px)-x0,h:Math.max(...py)-y0})}
+  out.push({c,items})}
+ return out}
+function dark(c,W,H){const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data,m=new Uint8Array(W*H),w=c.width;
+ for(let y=0;y<c.height;y++)for(let x=0;x<w;x++){const i=(y*w+x)*4;if(d[i]+d[i+1]+d[i+2]<540)m[y*W+x]=1}return m}
+function dil(m,W,H,r){const t=new Uint8Array(m.length),o=new Uint8Array(m.length);
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(m[y*W+x]){const a=Math.max(0,x-r),b=Math.min(W-1,x+r);for(let k=a;k<=b;k++)t[y*W+k]=1}
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(t[y*W+x]){const a=Math.max(0,y-r),b=Math.min(H-1,y+r);for(let k=a;k<=b;k++)o[k*W+x]=1}
+ return o}
+const unm=(A,B)=>A.filter(t=>!B.some(u=>u.s===t.s&&Math.abs(u.x-t.x)<8&&Math.abs(u.y-t.y)<8));
+const hit=(t,b)=>t.x<b.x+b.w&&t.x+t.w>b.x&&t.y<b.y+b.h&&t.y+t.h>b.y;
+const isDim=s=>/\d/.test(s)&&/^[\sØ⌀φΦ()+\-±\d.,xR×°]*$/.test(s);
+function cmp(a,b){
+ const W=Math.max(a.c.width,b.c.width),H=Math.max(a.c.height,b.c.height),m1=dark(a.c,W,H),m2=dark(b.c,W,H),d1=dil(m1,W,H,2),d2=dil(m2,W,H,2);
+ const ov=document.createElement('canvas');ov.width=W;ov.height=H;const ox=ov.getContext('2d'),id=ox.createImageData(W,H),p=id.data;
+ const gw=Math.ceil(W/G),gh=Math.ceil(H/G),cell=new Uint8Array(gw*gh),N1=new Uint16Array(gw*gh),N2=new Uint16Array(gw*gh);
+ for(let i=0;i<W*H;i++){let r=255,g=255,bl=255;const q=((i/W|0)/G|0)*gw+((i%W)/G|0);
+  if(m1[i]&&!d2[i]){r=0;g=90;bl=200;cell[q]=1;N1[q]++}else if(m2[i]&&!d1[i]){r=215;g=0;bl=0;cell[q]=1;N2[q]++}else if(m1[i]||m2[i]){r=g=bl=150}
+  p[i*4]=r;p[i*4+1]=g;p[i*4+2]=bl;p[i*4+3]=255}
+ ox.putImageData(id,0,0);
+ const dc=dil(cell,gw,gh,3),lab=new Uint8Array(gw*gh),boxes=[];
+ for(let s=0;s<dc.length;s++){if(!dc[s]||lab[s])continue;const stk=[s];lab[s]=1;let x0=1e9,y0=1e9,x1=-1,y1=-1,n1=0,n2=0;
+  while(stk.length){const c=stk.pop(),cx=c%gw,cy=(c/gw)|0;
+   if(cell[c]){x0=Math.min(x0,cx);y0=Math.min(y0,cy);x1=Math.max(x1,cx);y1=Math.max(y1,cy);n1+=N1[c];n2+=N2[c]}
+   for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=cx+dx,ny=cy+dy;if(nx<0||ny<0||nx>=gw||ny>=gh)continue;const q=ny*gw+nx;if(dc[q]&&!lab[q]){lab[q]=1;stk.push(q)}}}
+  if(x1>=0&&n1+n2>=10)boxes.push({x:x0*G-5,y:y0*G-5,w:(x1-x0+1)*G+10,h:(y1-y0+1)*G+10,n1,n2})}
+ boxes.sort((u,v)=>u.y-v.y||u.x-v.x);
+ const u1=unm(a.items,b.items),u2=unm(b.items,a.items),ds=[];
+ for(const bx of boxes){
+  const j=U=>U.filter(t=>hit(t,bx)).sort((p,q)=>p.x-q.x||p.y-q.y).map(t=>t.s).join(' ');
+  const t1=j(u1),t2=j(u2);let remark,type,r1,r2;
+  if(t1||t2){type=isDim(t1||t2)?'DIMENSION':'TEXT';r1=t1||'(not present)';r2=t2||'(not present)';
+   remark=t1&&t2?'CHANGED (Rev 1 → Rev 2)':t2?'ADDED in Rev 2':'REMOVED from Rev 1'}
+  else{type='GRAPHIC';const k=bx.n1>4*bx.n2?1:bx.n2>4*bx.n1?2:0;
+   remark=k==2?'ADDED in Rev 2':k==1?'REMOVED from Rev 1':'CHANGED (Rev 1 → Rev 2)';
+   r1=k==2?'(not present)':'Geometry';r2=k==1?'(not present)':'Geometry'}
+  ds.push({box:bx,type,r1,r2,remark})}
+ return{ds,ov,W,H,a,b}}
+const kind=d=>d.remark[0]=='C'?'Changed':d.remark[0]=='A'?'Added':'Removed';
+function title(d){const k=kind(d);if(d.type=='GRAPHIC')return 'Drawing lines '+k.toLowerCase()+(d.near?' near “'+d.near+'”':'');
+ return k=='Added'?'+ '+d.r2:k=='Removed'?'− '+d.r1:d.r1+' → '+d.r2}
+function crop(src,W,H,d,rev,col){
+ const b=d.box,cw=Math.min(W,Math.max(b.w+160,340)),ch=Math.min(H,Math.max(b.h+100,190));
+ const sx=Math.max(0,Math.min(W-cw,b.x+b.w/2-cw/2)),sy=Math.max(0,Math.min(H-ch,b.y+b.h/2-ch/2));
+ const c=document.createElement('canvas');c.width=cw;c.height=ch;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,cw,ch);
+ x.drawImage(src,sx,sy,cw,ch,0,0,cw,ch);
+ const pres=rev==1?kind(d)!='Added':kind(d)!='Removed';
+ x.lineWidth=3;x.strokeStyle=col;x.setLineDash(pres?[]:[8,5]);if(pres){x.fillStyle=col+'33';x.fillRect(b.x-sx,b.y-sy,b.w,b.h)}x.strokeRect(b.x-sx,b.y-sy,b.w,b.h);return c}
+function mark(src,W,H,ds,rev,col){
+ const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,W,H);x.drawImage(src,0,0);
+ for(const d of ds){const b=d.box,pres=rev==1?kind(d)!='Added':rev==2?kind(d)!='Removed':true;
+  x.lineWidth=3;x.strokeStyle=col;x.setLineDash(pres?[]:[8,5]);if(pres){x.fillStyle=col+'33';x.fillRect(b.x,b.y,b.w,b.h)}x.strokeRect(b.x,b.y,b.w,b.h);x.setLineDash([]);
+  x.fillStyle=col;x.beginPath();x.arc(b.x,b.y,13,0,7);x.fill();x.fillStyle='#fff';x.font='bold 15px Arial';x.textAlign='center';x.textBaseline='middle';x.fillText(d.n,b.x,b.y+1)}
+ c.className='big';return c}
+/* ---------- dashboard ---------- */
+let res=[],all=[],cur=0,mode='2',view={s:1,x:0,y:0},sel=null,F={t:new Set(),k:new Set(),q:''},names=['',''],cmpP=50,moved=false;
+const vp=$('vp'),inner=$('inner');
+const applyView=()=>{inner.style.transform=`translate(${view.x}px,${view.y}px) scale(${view.s})`;inner.style.setProperty('--s',view.s)};
+function fit(){const r=res[cur],w=vp.clientWidth,h=vp.clientHeight,s=Math.min(w/r.W,h/r.H);view={s,x:(w-r.W*s)/2,y:(h-r.H*s)/2};applyView()}
+function zoom(f,px=vp.clientWidth/2,py=vp.clientHeight/2){const s=Math.max(.05,Math.min(14,view.s*f)),k=s/view.s;view={s,x:px-(px-view.x)*k,y:py-(py-view.y)*k};applyView()}
+const vis=d=>(!F.t.size||F.t.has(d.cat))&&(!F.k.size||F.k.has(kind(d)))&&(!F.q||(d.n+' '+title(d)+' '+d.r1+' '+d.r2+' '+d.near+' '+d.loc).toLowerCase().includes(F.q));
+function stats(){const c=k=>all.filter(d=>kind(d)==k).length,rv=all.filter(d=>d.rv!='Pending').length;
+ $('stats').innerHTML=`<div class="stat"><b>${all.length}</b>changes found</div><div class="stat"><b style="color:#d98a00">${c('Changed')}</b>changed</div><div class="stat"><b style="color:#1a7f37">${c('Added')}</b>added in Rev 2</div><div class="stat"><b style="color:#c0392b">${c('Removed')}</b>removed from Rev 1</div><div class="stat wide"><b>${rv} / ${all.length}</b>reviewed<div class="pb"><i style="width:${all.length?rv/all.length*100:0}%"></i></div></div>`}
+function chips(){$('chips').innerHTML=['Dimension','Text / note','Geometry','Title block'].map(c=>`<button class="chip${F.t.has(c)?' on':''}" data-t="${c}">${c} <b>${all.filter(d=>d.cat==c).length}</b></button>`).join('')+'<span>|</span>'+['Changed','Added','Removed'].map(k=>`<button class="chip${F.k.has(k)?' on':''}" data-k="${k}">${k}</button>`).join('')}
+function drawViewer(){
+ const r=res[cur];inner.innerHTML='';inner.style.width=r.W+'px';inner.style.height=r.H+'px';
+ const add=c=>{c.style.cssText='position:absolute;left:0;top:0;pointer-events:none';inner.appendChild(c);return c};
+ if(mode=='1')add(r.a.c);else if(mode=='2')add(r.b.c);else{add(r.a.c);const t=add(r.b.c);t.style.clipPath=`inset(0 0 0 ${cmpP}%)`;
+  const sl=el('<div class="sl"></div>');sl.style.left=cmpP+'%';
+  sl.onpointerdown=e=>{e.stopPropagation();sl.setPointerCapture(e.pointerId);sl.onpointermove=ev=>{const rc=inner.getBoundingClientRect();cmpP=Math.max(0,Math.min(100,(ev.clientX-rc.left)/rc.width*100));sl.style.left=cmpP+'%';t.style.clipPath=`inset(0 0 0 ${cmpP}%)`};sl.onpointerup=()=>sl.onpointermove=null};
+  inner.appendChild(sl)}
+ for(const d of r.ds.filter(vis)){const b=d.box,x=el(`<div class="bx ${kind(d)[0]}${d.n==sel?' sel':''}" data-n="${d.n}" title="#${d.n}"><span class="bn">${d.n}</span></div>`);
+  x.style.cssText=`left:${b.x}px;top:${b.y}px;width:${b.w}px;height:${b.h}px`;x.onclick=()=>{if(!moved)select(d.n)};inner.appendChild(x)}
+ document.querySelectorAll('.tb [data-m]').forEach(b=>b.classList.toggle('on',b.dataset.m==mode));applyView()}
+function renderList(){const L=$('list');L.innerHTML='';const v=all.filter(vis);if(!v.length)L.innerHTML='<div class="cd">No matching changes.</div>';
+ for(const d of v){const c=el(`<div class="cd ${kind(d)[0]}${d.n==sel?' sel':''}"><div class="ch"><span class="nb">${d.n}</span><span>${esc(title(d))}</span></div><div class="sub">${kind(d)} · ${d.loc}${d.page>1||res.length>1?' · page '+d.page:''}${d.rv!='Pending'?' · '+d.rv:''}</div></div>`);
+  c.querySelector('.ch').onclick=c.querySelector('.sub').onclick=()=>select(d.n==sel?null:d.n);
+  if(d.n==sel){const r=res[d.page-1],dt=el('<div><div class="two"><div><div class="lb b1">Rev 1</div></div><div><div class="lb b2">Rev 2</div></div></div><div class="rv"><select><option>Pending</option><option>Approved</option><option>Rejected</option><option>Query</option></select><textarea rows="2" placeholder="Comment…"></textarea></div></div>'),cs=dt.querySelectorAll('.two>div');
+   cs[0].appendChild(crop(r.a.c,r.W,r.H,d,1,'#0b5ed7'));cs[1].appendChild(crop(r.b.c,r.W,r.H,d,2,'#d00000'));
+   const se=dt.querySelector('select'),ta=dt.querySelector('textarea');se.value=d.rv;se.onchange=()=>{d.rv=se.value;stats();renderList()};ta.value=d.comment;ta.oninput=()=>d.comment=ta.value;c.appendChild(dt)}
+  L.appendChild(c)}}
+function select(n){sel=n;const d=all.find(x=>x.n==n);
+ if(d&&d.page-1!=cur){cur=d.page-1;$('pgs').value=cur;drawViewer()}
+ inner.querySelectorAll('.bx').forEach(b=>b.classList.toggle('sel',b.dataset.n==n));renderList();
+ if(d){const b=d.box,w=vp.clientWidth,h=vp.clientHeight,r=res[cur],s=Math.max(Math.min(w/(b.w+400),h/(b.h+400),4),Math.min(w/r.W,h/r.H));view={s,x:w/2-(b.x+b.w/2)*s,y:h/2-(b.y+b.h/2)*s};applyView()}
+ document.querySelector('.cd.sel')?.scrollIntoView({block:'nearest'})}
+function refresh(){chips();renderList();drawViewer()}
+$('chips').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;const[S_,v]=b.dataset.t?[F.t,b.dataset.t]:[F.k,b.dataset.k];S_.has(v)?S_.delete(v):S_.add(v);refresh()};
+$('q').oninput=e=>{F.q=e.target.value.toLowerCase();renderList();drawViewer()};
+document.querySelectorAll('.tb [data-m]').forEach(b=>b.onclick=()=>{mode=b.dataset.m;drawViewer()});
+$('zi').onclick=()=>zoom(1.3);$('zo').onclick=()=>zoom(1/1.3);$('zf').onclick=fit;
+$('pgs').onchange=e=>{cur=+e.target.value;drawViewer();fit()};
+vp.addEventListener('wheel',e=>{e.preventDefault();const r=vp.getBoundingClientRect();zoom(e.deltaY<0?1.15:1/1.15,e.clientX-r.left,e.clientY-r.top)},{passive:false});
+vp.onpointerdown=e=>{moved=false;const sx=e.clientX,sy=e.clientY,ox=view.x,oy=view.y;vp.style.cursor='grabbing';
+ vp.onpointermove=ev=>{if(Math.hypot(ev.clientX-sx,ev.clientY-sy)>4)moved=true;if(moved){view.x=ox+ev.clientX-sx;view.y=oy+ev.clientY-sy;applyView()}};
+ vp.onpointerup=()=>{vp.onpointermove=null;vp.style.cursor='grab';setTimeout(()=>moved=false,0)}};
+addEventListener('resize',()=>res.length&&!$('dash').hidden&&fit());
+/* ---------- run ---------- */
+async function run(){
+ const f1=$('f1').files[0],f2=$('f2').files[0];if(!f1||!f2){st('Please choose both PDF files.');return}
+ $('go').disabled=true;
+ try{st('Reading Rev 1…');await tick();const A=await loadPages(f1);st('Reading Rev 2…');await tick();const B=await loadPages(f2);
+  const n=Math.min(A.length,B.length);res=[];all=[];let k=0;sel=null;cur=0;F={t:new Set(),k:new Set(),q:''};$('q').value='';names=[f1.name,f2.name];
+  for(let i=0;i<n;i++){st('Comparing page '+(i+1)+' of '+n+'…');await tick();const r=cmp(A[i],B[i]);
+   for(const d of r.ds){const b=d.box,cx=b.x+b.w/2,cy=b.y+b.h/2;d.n=++k;d.page=i+1;d.rv='Pending';d.comment='';
+    const row=cy<r.H/3?'top':cy<2*r.H/3?'centre':'bottom',col=cx<r.W/3?'left':cx<2*r.W/3?'centre':'right';
+    d.loc=row=='centre'&&col=='centre'?'centre':row+' '+col;
+    d.cat=cx>.7*r.W&&cy>.88*r.H?'Title block':d.type=='DIMENSION'?'Dimension':d.type=='TEXT'?'Text / note':'Geometry';
+    let best='',bd=1e12;for(const t of[...A[i].items,...B[i].items]){const dd=(t.x+t.w/2-cx)**2+(t.y+t.h/2-cy)**2;if(dd<bd){bd=dd;best=t.s}}d.near=best.slice(0,24);all.push(d)}
+   res.push(r)}
+  $('sub').textContent=`${f1.name} → ${f2.name} | generated ${new Date().toLocaleString()}`+(A.length!=B.length?` | page counts differ (${A.length} vs ${B.length}), first ${n} compared`:'');
+  $('pgs').hidden=n<2;$('pgs').innerHTML=res.map((_,i)=>`<option value="${i}">Page ${i+1}</option>`).join('');
+  $('up').hidden=true;$('dash').hidden=false;stats();refresh();fit();st('')
+ }catch(e){console.error(e);st('Error: '+e.message)}
+ $('go').disabled=false}
+$('go').onclick=run;
+$('newb').onclick=()=>{$('dash').hidden=true;$('up').hidden=false};
+$('csv').onclick=()=>{if(!all.length)return;const q=s=>'"'+String(s).replace(/"/g,'""')+'"',rows=[['#','Page','Category','Change','Rev 1','Rev 2','Location','Review','Comment'],...all.map(d=>[d.n,d.page,d.cat,kind(d),d.r1,d.r2,d.loc,d.rv,d.comment])];
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+rows.map(r=>r.map(q).join(',')).join('\r\n')],{type:'text/csv'}));a.download='drawing-review.csv';a.click()}
+/* ---------- printable report ---------- */
+function buildReport(){
+ const rep=$('rep');rep.innerHTML='';const sh=el('<div class="sheet"></div>');rep.appendChild(sh);const cnt=x=>all.filter(d=>kind(d)==x).length;
+ const nP=res.length,rvd=all.filter(d=>d.rv!='Pending').length;
+ sh.appendChild(el(`<div class="pg cover"><div class="gen">Generated ${new Date().toLocaleString()} &nbsp;|&nbsp; Rev 1: ${esc(names[0])} &nbsp;|&nbsp; Rev 2: ${esc(names[1])}</div>
+ <div class="gen">Drawings compared: ${esc(names[0])} &rarr; ${esc(names[1])} (${nP} page${nP>1?'s':''}) &nbsp;|&nbsp; Reviewed: ${rvd} of ${all.length}</div>
+ <div class="n14${all.length?'':' ok'}">${all.length?all.length+' difference(s) found':'No differences found'}</div>
+ <div class="cts"><span>${cnt('Changed')} changed</span><span>${cnt('Added')} added in Rev 2</span><span>${cnt('Removed')} removed from Rev 1</span></div>
+ <h3>How to read this PDF</h3><ol><li>Difference list (next page): every difference with its Rev 1 value, Rev 2 value, remark and review status.</li>
+ <li>Overview of the Rev 2 drawing: every difference is boxed in RED and numbered.</li>
+ <li>Overview of the Rev 1 drawing: the same numbers in BLUE show where each item was (dashed = not present).</li>
+ <li>Difference details: zoomed Rev 1 and Rev 2 views of each numbered difference, side by side.</li>
+ <li>Overlay: both drawings on top of each other (BLUE = only in Rev 1, RED = only in Rev 2, gray = same).</li></ol>
+ <h3>Colour key</h3>
+ <div class="kr" style="color:#d00000"><span class="sw" style="border-color:#d00000;background:#f5c0c0"></span>RED = difference on Rev 2 (new / changed value)</div>
+ <div class="kr" style="color:#0b5ed7"><span class="sw" style="border-color:#0b5ed7;background:#bfd4f2"></span>BLUE = same spot on Rev 1 (old value / where it was)</div>
+ <div style="font-size:14px;margin-top:10px">Remark meanings: &nbsp;ADDED = only in Rev 2 &nbsp;|&nbsp; REMOVED = only in Rev 1 &nbsp;|&nbsp; CHANGED = same place, different value</div></div>`));
+ const rows=res.map((r,i)=>r.ds.length?`<tr class="gr"><td colspan="7">${esc(names[1])} &nbsp;-&nbsp; page ${i+1}</td></tr>`+r.ds.map(d=>`<tr class="k${kind(d)[0]}"><td>${d.n}</td><td>${d.page}</td><td class="tp">${d.type}</td><td>${esc(d.r1)}</td><td>${esc(d.r2)}</td><td class="tp">${d.remark}</td><td>${d.rv}${d.comment?': '+esc(d.comment):''}</td></tr>`).join(''):'').join('');
+ sh.appendChild(el(`<div class="pg"><h2 class="dlh">Difference list</h2><table class="dl"><thead><tr><th>#</th><th>Page</th><th>Type</th><th>Rev 1</th><th>Rev 2</th><th>Remark</th><th>Review</th></tr></thead><tbody>${rows||'<tr><td colspan="7">No differences found.</td></tr>'}</tbody></table></div>`));
+ res.forEach((r,i)=>{const{ds,ov,W,H}=r,pn=' – page '+(i+1);let q;
+  q=el(`<div class="pg"><div class="bar" style="background:#d00000">REV 2 drawing – ${ds.length} difference(s) in RED${pn}</div></div>`);q.appendChild(mark(r.b.c,W,H,ds,2,'#d00000'));sh.appendChild(q);
+  q=el(`<div class="pg"><div class="bar" style="background:#0b5ed7">REV 1 drawing – same spots in BLUE${pn}</div></div>`);q.appendChild(mark(r.a.c,W,H,ds,1,'#0b5ed7'));sh.appendChild(q);
+  for(let s=0;s<ds.length;s+=6){q=el(`<div class="pg"><h2 style="font-size:16px">Difference details${pn}</h2><div class="grid"></div></div>`);
+   for(const d of ds.slice(s,s+6)){const c=el(`<div class="card"><div class="hd">#${d.n} ${d.type} – ${d.remark}</div><div class="vl">Rev 1: ${esc(d.r1)} &nbsp; Rev 2: ${esc(d.r2)}</div><div class="two"><div></div><div></div></div></div>`),cs=c.querySelectorAll('.two>div');
+    cs[0].appendChild(crop(r.a.c,W,H,d,1,'#0b5ed7'));cs[1].appendChild(crop(r.b.c,W,H,d,2,'#d00000'));q.querySelector('.grid').appendChild(c)}sh.appendChild(q)}
+  q=el(`<div class="pg"><div class="bar" style="background:#1d4e7a">Overlay – BLUE only Rev 1, RED only Rev 2, gray same${pn}</div></div>`);q.appendChild(mark(ov,W,H,ds,0,'#000'));sh.appendChild(q)})}
+$('pr').onclick=()=>{if(!res.length)return;buildReport();window.print()};
+</script></body></html>
